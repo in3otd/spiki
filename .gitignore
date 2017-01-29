@@ -1,0 +1,6 @@
+# Temp Files
+*~
+
+# emacs
+# dot hash files (write locks)
+.\#*
