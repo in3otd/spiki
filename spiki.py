@@ -5,8 +5,14 @@
 import sys
 import math
 
-import nlopt
-from numpy import *  # needed by nlopt
+useNLopt = True
+try:  # check if nlopt is available
+    import nlopt
+except ImportError:
+    useNLopt = False
+
+if (useNLopt):
+    from numpy import *  # needed by nlopt
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import QThread
@@ -59,6 +65,8 @@ class kSpiralCalc(QtGui.QMainWindow, design.Ui_MainWindow):
 
         self.runSimBtn.clicked.connect(self.runSimulation)
         self.optimizeBtn.clicked.connect(self.runOptimization)
+        if (not useNLopt):
+            self.optimizeBtn.setEnabled(False)  # disable optimization button
 
         self.statusBar().showMessage("Ready.")
 
