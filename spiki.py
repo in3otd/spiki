@@ -14,14 +14,14 @@ except ImportError:
 if (useNLopt):
     from numpy import *  # needed by nlopt
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, uic
 from PyQt4.QtCore import QThread
 
 import dos
-import design
 
+Ui_MainWindow, QtBaseClass = uic.loadUiType("design.ui")
 
-class kSpiralCalc(QtGui.QMainWindow, design.Ui_MainWindow):
+class kSpiralCalc(QtBaseClass, Ui_MainWindow):
 
     def __init__(self):
         super(self.__class__, self).__init__()
