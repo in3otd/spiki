@@ -136,10 +136,10 @@ class kmodule():
             '  (fp_line (start %f %f) (end %f %f) (layer %s) (width %f))\n' %
             (start.x, start.y, end.x, end.y, layer, width))
 
-    def add_smd_pad(self, name, shape, origin, size):
+    def add_smd_pad(self, name, shape, origin, size, layer):
         self.fout.write(
-            '  (pad %s smd %s (at %f %f) (size  %f %f) (layers F.Cu F.Paste F.Mask))\n' %
-            (str(name), shape, origin.x, origin.y, size.x, size.y))
+            '  (pad %s smd %s (at %f %f) (size  %f %f) (layers %s.Cu %s.Paste %s.Mask))\n' %
+            (str(name), shape, origin.x, origin.y, size.x, size.y, layer, layer, layer))
 
     def add_thru_pad(self, name, shape, origin, size, drill):
         self.fout.write(

@@ -240,19 +240,27 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         sm = dos.kmodule(fname)
         sm.write_header(name='SIND', descr='spiral inductor', tags='SMD')
         dir = 1
-        vx = dos.circ_spiral(nTurns, innerRadius, pitch, dir, d)
-        pad1 = vx[0]
-        sm.add_circ_spiral(vx, 'F.Cu', traceWidth)
-        if (nLayers == 2):
-            vx = dos.circ_spiral(nTurns, innerRadius, pitch, -dir, d)
-            sm.add_circ_spiral(vx, 'B.Cu', traceWidth)
-            sm.add_thru_pad('lc', 'circle', vx[0], dos.Point(0.6, 0.6), 0.3)
-
-        pad2 = vx[-1]
+        if (self.indStyleCB.currentIndex() == 0): # circular segments
+            vx = dos.circ_spiral(nTurns, innerRadius, pitch, dir, d)
+            sm.add_circ_spiral(vx, 'F.Cu', traceWidth)
+            if (nLayers == 2):
+                pad1 = vx[-1] # inductor starts at end of top spiral
+                vx = dos.circ_spiral(nTurns, innerRadius, pitch, -dir, d)
+                sm.add_circ_spiral(vx, 'B.Cu', traceWidth)
+                sm.add_thru_pad('lc', 'circle', vx[0], dos.Point(0.6, 0.6), 0.3)
+                end_layer = 'B'
+            else: # single-layer spiral
+                pad1 = vx[0] # inductor starts at center of spiral
+                end_layer = 'F'
+            pad2 = vx[-1] # inductor ends always at end of last spiral
+        else: # circular arcs
+            print('circular arcs spiral not yet supported!')
+            notimplemented()
+                
         # add SMD pads at the beginning and end
         padSize = dos.Point(traceWidth/2.0, traceWidth/2.0)
-        sm.add_smd_pad('1', 'rect', pad1, padSize)
-        sm.add_smd_pad('2', 'rect', pad2, padSize)
+        sm.add_smd_pad('1', 'rect', pad1, padSize, 'F')
+        sm.add_smd_pad('2', 'rect', pad2, padSize, end_layer)
         
         #draw_arcs_spiral(nTurns, innerRadius, pitch, traceWidth, N, dir)
         sm.write_refs(0, 0, ref='REF**', value='LLL')
