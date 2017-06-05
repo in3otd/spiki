@@ -125,9 +125,18 @@ class kmodule():
         layer -- the name of the layer for the line
         pen_width -- the pen width
         """
+        # Kicad arc definition is a bit weird:
+        #   start is the arc centre
+        #   end is the arc starting point
+        #   angle is the angular span, as expected
         self.fout.write(
             '  (fp_arc (start %f %f) (end %f %f) (angle %f) (layer %s) (width %f))\n' %
             (centre.x, centre.y, start.x, start.y, math.degrees(angle), layer, pen_width))
+
+    def add_arc_spiral(self, arcs, layer, width):
+        for a in arcs:
+            centre, start, angle = a
+            self.add_arc(centre, start, angle, layer, width)
 
     def add_line(self, start, end, layer, width):
         """Draw line"""
@@ -407,6 +416,8 @@ def circ_spiral(N_turns, r_in, pitch, dir, d=0.1):
     pitch -- spacing between conductors centers
     dir -- spiral direction
     d -- max error w.r.t.circular arc
+
+    Returns segments vertices list
     """
 
     p_start = Point(r_in, 0)
@@ -486,6 +497,68 @@ def draw_arcs_spiral(N_turns, r_in, pitch, tr_w, N, dir):
         sm.add_arc(p_center, p_start, dir * theta, layer, tr_w)
         sf.add_arc(p_center, p_start, dir * theta, layer, tr_w)
 
+
+def arcs_spiral(N_turns, r_in, pitch, dir, N):
+    """
+    Draw a spiral approximation using circular arcs.
+
+    Keyword arguments:
+    N_turns -- number of turns
+    r_in -- internal radius
+    pitch -- spacing between conductors centers
+    dir -- spiral direction/PCB side
+    N -- number of generator polygon vertices
+
+    Returns list of circular arcs descriptions (center, start, angle)
+
+    see
+    "Scan Converting Spirals", F. Taponecco and M. Alexa,
+    http://wscg.zcu.cz/wscg2002/Papers_2002/F11.pdf
+    and
+    "Piecewise Circular Approximation of Spirals and Polar Polynomials", F. Taponecco and M. Alexa,
+    http://147.228.63.9/wscg2003/papers_2003/i31.pdf
+    """
+
+    theta = 2 * math.pi / N  # arc length in radians; polygon central angle
+    # polygon radius (distance from the center to a vertex)
+    p = pitch / (2.0 * N * math.sin(theta / 2.0))
+    b = r_in - pitch / (2.0 * N)  # initial point offset
+    beta = math.pi - theta  # polygon interior angle
+    # initial arc point coordinates
+    end_x = p + b * math.cos(beta / 2)
+    end_y = -b * math.sin(beta / 2)
+    p_end = Point(end_x, end_y)
+    # initial point angle
+    start_angle = -math.atan2(end_y, end_x)
+    start_angle = beta / 2
+    delta_y = p * math.cos(theta / 2)  # apothem of the polygon
+
+    layer = 'F.Cu' if (dir == 1) else 'B.Cu'
+    p_end.rotate(start_angle)  # turn CW
+    p_end.slide_xy(0, -delta_y)  # shift to align top and bottom spirals
+    arcs = []
+    # FIXME: make sure that N * N_turns is an integer
+    for n in range(1, int(round(N * N_turns)) + 1):
+        p_start = p_end.copy()
+        p_center = Point(p * math.cos(n * theta), p * math.sin(n * theta))
+        p_center.rotate(start_angle)
+        p_center.slide_xy(0, -delta_y)
+        p_end.rotate_about(p_center, theta)  # end point of the circular arc
+
+        if (dir == -1):
+            p_center.y = -p_center.y
+            p_start.y = -p_start.y
+
+        # for debug
+        # if (n <= N) : # add small pads to mark polygon vertices
+        #    sm.add_smd_pad(n, 'rect', p_center, Point(0.1, 0.1))
+        #sm.add_smd_pad(N+n, 'rect', p_start, Point(0.1, 0.1))
+
+        arcs.append([p_center, p_start, dir * theta])
+
+        #sm.add_arc(p_center, p_start, dir * theta, layer, tr_w)
+        #sf.add_arc(p_center, p_start, dir * theta, layer, tr_w)
+    return arcs
 
 ########################################
 

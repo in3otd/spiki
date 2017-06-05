@@ -88,7 +88,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
 
     def updateSkinDepth(self):
         freq = float(self.freqLineEdit.text()) * 1e6
-        sigma = 5.8e7
+        sigma = 5.8e7 # copper conductivity
         mu0 = 4.0e-7 * math.pi
         self.delta = 1.0 / math.sqrt(math.pi * freq * mu0 * sigma)  # in meters
         self.skinDepthLineEdit.setText(str(self.delta * 1e3))
@@ -254,8 +254,30 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
                 end_layer = 'F'
             pad2 = vx[-1] # inductor ends always at end of last spiral
         else: # circular arcs
-            print('circular arcs spiral not yet supported!')
-            notimplemented()
+            # FIXME: make N below user-configurable instead of 4
+            arcs = dos.arcs_spiral(nTurns, innerRadius, pitch, dir, 4)
+            sm.add_arc_spiral(arcs, 'F.Cu', traceWidth)
+            if (nLayers == 2):
+                # inductor starts at end of top spiral
+                p_end = arcs[-1][1].copy() # starting point of the last arc
+                p_center = arcs[-1][0] # centre of the last arc
+                theta =  arcs[-1][2] # arc starting point 
+                p_end.rotate_about(p_center, theta)  # end point of the circular arc
+                pad1 = p_end
+                arcs = dos.arcs_spiral(nTurns, innerRadius, pitch, -dir, 4)
+                sm.add_arc_spiral(arcs, 'B.Cu', traceWidth)
+                sm.add_thru_pad('lc', 'circle', arcs[0][1], dos.Point(0.6, 0.6), 0.3)
+                end_layer = 'B'
+            else: # single-layer spiral
+                # inductor starts at center of spiral
+                pad1 = arcs[0][1] # starting point of the last arc
+                end_layer = 'F'
+            # inductor ends always at end of last spiral
+            p_end = arcs[-1][1].copy() # starting point of the last arc
+            p_center = arcs[-1][0] # centre of the last arc
+            theta =  arcs[-1][2] # arc starting point 
+            p_end.rotate_about(p_center, theta)  # end point of the circular arc
+            pad2 = p_end
                 
         # add SMD pads at the beginning and end
         padSize = dos.Point(traceWidth/2.0, traceWidth/2.0)
