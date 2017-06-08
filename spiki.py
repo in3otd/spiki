@@ -31,6 +31,27 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         self.actionExit.triggered.connect(QtGui.qApp.quit)
         self.actionSave_module.triggered.connect(self.writeModule)
 
+        # add validators to LineEdits
+        dGt0Val = QtGui.QDoubleValidator() # a double...
+        dGt0Val.setBottom(0.0) # ...greater than zero
+        self.nTurnsLineEdit.setValidator(dGt0Val)
+        self.innerRadiusLineEdit.setValidator(dGt0Val)
+        self.pitchLineEdit.setValidator(dGt0Val)
+        self.spacingLineEdit.setValidator(dGt0Val)
+        self.traceWidthLineEdit.setValidator(dGt0Val)
+
+        self.freqLineEdit.setValidator(dGt0Val)
+
+        self.pcbThicknessLineEdit.setValidator(dGt0Val)
+        self.cuThicknessLineEdit.setValidator(dGt0Val)
+        self.minSpacingLineEdit.setValidator(dGt0Val)
+
+        self.drawTolLineEdit.setValidator(dGt0Val)
+
+        iGt1Val = QtGui.QIntValidator() # an integer...
+        iGt1Val.setBottom(1) # ...greater than 1
+        self.nLayersLineEdit.setValidator(iGt1Val)
+
         # some default values
         self.nTurnsLineEdit.setText('13')
         self.innerRadiusLineEdit.setText('5')
@@ -228,7 +249,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
             return
         if (not fname.endsWith('.kicad_mod')):
             fname = fname + '.kicad_mod'
-        
+
         nTurns = float(self.nTurnsLineEdit.text())
         innerRadius = float(self.innerRadiusLineEdit.text())
         pitch = float(self.pitchLineEdit.text())
@@ -261,7 +282,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
                 # inductor starts at end of top spiral
                 p_end = arcs[-1][1].copy() # starting point of the last arc
                 p_center = arcs[-1][0] # centre of the last arc
-                theta =  arcs[-1][2] # arc starting point 
+                theta = arcs[-1][2] # arc starting point
                 p_end.rotate_about(p_center, theta)  # end point of the circular arc
                 pad1 = p_end
                 arcs = dos.arcs_spiral(nTurns, innerRadius, pitch, -dir, 4)
@@ -275,27 +296,30 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
             # inductor ends always at end of last spiral
             p_end = arcs[-1][1].copy() # starting point of the last arc
             p_center = arcs[-1][0] # centre of the last arc
-            theta =  arcs[-1][2] # arc starting point 
+            theta = arcs[-1][2] # arc starting point
             p_end.rotate_about(p_center, theta)  # end point of the circular arc
             pad2 = p_end
-                
+
         # add SMD pads at the beginning and end
         padSize = dos.Point(traceWidth/2.0, traceWidth/2.0)
         sm.add_smd_pad('1', 'rect', pad1, padSize, 'F')
         sm.add_smd_pad('2', 'rect', pad2, padSize, end_layer)
-        
+
         #draw_arcs_spiral(nTurns, innerRadius, pitch, traceWidth, N, dir)
         sm.write_refs(0, 0, ref='REF**', value='LLL')
         sm.close()
 
     def estimateInductance(self):
-        nTurns = float(self.nTurnsLineEdit.text())
-        innerRadius = float(self.innerRadiusLineEdit.text())
-        pitch = float(self.pitchLineEdit.text())
-        traceWidth = float(self.traceWidthLineEdit.text())
-        cuThickness = float(self.cuThicknessLineEdit.text())
-        pcbThickness = float(self.pcbThicknessLineEdit.text())
-        nLayers = int(self.nLayersLineEdit.text())
+        try:
+            nTurns = float(self.nTurnsLineEdit.text())
+            innerRadius = float(self.innerRadiusLineEdit.text())
+            pitch = float(self.pitchLineEdit.text())
+            traceWidth = float(self.traceWidthLineEdit.text())
+            cuThickness = float(self.cuThicknessLineEdit.text())
+            pcbThickness = float(self.pcbThicknessLineEdit.text())
+            nLayers = int(self.nLayersLineEdit.text())
+        except ValueError:
+            return # do not estimate inductance for invalid values
 
         # compute inner and outer diameter for Mohan's formula
         din = 2 * innerRadius - traceWidth + pitch / 2.0
