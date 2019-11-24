@@ -56,10 +56,14 @@ Once a spiral inductor with the desired characteristics has been obtained, the c
 
 Here are some pictures of spiral inductors generated with spiki
 
-- 3.5 turn, single- layer
+- Circular 3.5 turn, single-layer
 
-![3.5 turn, 1 layer](https://raw.github.com/in3otd/spiki/gh-pages/ind_spi_3.5.png)
+![Circular 3.5 turn, 1 layer](https://raw.github.com/in3otd/spiki/gh-pages/ind_spi_3.5.png)
 
-- 3.5 turn, two layers
+- Circular 3.5 turn, two layers
 
-![3.5 turn, 2 layer2](https://raw.github.com/in3otd/spiki/gh-pages/ind_spi_3.5_2layers.png)
+![Circular 3.5 turn, 2 layer2](https://raw.github.com/in3otd/spiki/gh-pages/ind_spi_3.5_2layers.png)
+
+- Square 13 turns, single-layer
+
+![Square 13 turns, 1 layer](https://raw.github.com/in3otd/spiki/gh-pages/int_square_13.png)

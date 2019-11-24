@@ -21,6 +21,18 @@ import dos
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType("design.ui")
 
+class SuperEnum(object):
+    class __metaclass__(type):
+        def __iter__(self):
+            for item in self.__dict__:
+                if item == self.__dict__[item]:
+                    yield item
+                    
+class InductorStyle(SuperEnum):
+    CIRCULAR_SEGMENTS = 0
+    CIRCULAR_ARCS = 1
+    SQUARE = 2
+
 class kSpiralCalc(QtBaseClass, Ui_MainWindow):
 
     def __init__(self):
@@ -68,6 +80,8 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         self.minSpacingLineEdit.setText('0.15')
 
         self.drawTolLineEdit.setText('0.1')
+        self.polygonVertexCountLineEdit.setText('4')
+        self.setPolygonVertexCountSettingVisible(False)
 
         self.nTurnsLineEdit.textChanged.connect(self.estimateInductance)
         self.innerRadiusLineEdit.textChanged.connect(self.estimateInductance)
@@ -75,6 +89,8 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         self.spacingLineEdit.textChanged.connect(self.estimateInductance)
         self.traceWidthLineEdit.textChanged.connect(self.estimateInductance)
         self.nLayersLineEdit.textChanged.connect(self.estimateInductance)
+        
+        self.indStyleCB.activated.connect(self.inductorStyleChanged)
 
         self.estimateInductance()
 
@@ -90,6 +106,39 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
             self.optimizeBtn.setEnabled(False)  # disable optimization button
 
         self.statusBar().showMessage("Ready.")
+        
+    def showInvalidParametersErrorMsg(self):
+        msg = QtGui.QMessageBox()
+        msg.setIcon(QtGui.QMessageBox.Critical)
+        msg.setText('It is physically impossible to produce an inductor from the given inductor parameters')
+        msg.setInformativeText('Please adjust one or more of the inductor parameters and try again')
+        msg.setWindowTitle("Error")
+        msg.exec_()
+        
+    def inductorStyleChanged(self, index):
+        if (index == InductorStyle.SQUARE):
+            self.setPolygonVertexCountSettingVisible(False)
+            
+            self.nLayersLabel.setVisible(False)
+            self.nLayersLineEdit.setText('1')
+            self.nLayersLineEdit.setVisible(False)
+
+            self.innerRadiusLabel.setText('edge length')
+        
+        if (index == InductorStyle.CIRCULAR_SEGMENTS):
+            self.setPolygonVertexCountSettingVisible(False)
+            
+        if (index == InductorStyle.CIRCULAR_ARCS):
+            self.setPolygonVertexCountSettingVisible(True)
+            
+        if ((index == InductorStyle.CIRCULAR_SEGMENTS) or (index == InductorStyle.CIRCULAR_ARCS)):
+            self.nLayersLabel.setVisible(True)
+            self.nLayersLineEdit.setVisible(True)
+            self.innerRadiusLabel.setText('inner radius')
+        
+    def setPolygonVertexCountSettingVisible(self, val):
+        self.polygonVertexCountLabel.setVisible(val)
+        self.polygonVertexCountLineEdit.setVisible(val)
 
     def updateSpacing(self):
         pitch = float(self.pitchLineEdit.text())
@@ -110,8 +159,10 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
     def updateSkinDepth(self):
         freq = float(self.freqLineEdit.text()) * 1e6
         sigma = 5.8e7 # copper conductivity
-        mu0 = 4.0e-7 * math.pi
-        self.delta = 1.0 / math.sqrt(math.pi * freq * mu0 * sigma)  # in meters
+        mur = 0.999994 # relative magnetic permeability of copper
+        mu0 = 4.0e-7 * math.pi # the permeability of free space
+        mu = mur * mu0 # permeability of a given conductor,
+        self.delta = 1.0 / math.sqrt(math.pi * freq * mu * sigma)  # in meters
         self.skinDepthLineEdit.setText(str(self.delta * 1e3))
 
     def runSimulation(self):
@@ -163,7 +214,12 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         #draw_arcs_spiral(N_turns, r_in, pitch, tr_w, N, dir)
         dir = 1
 
-        vx = dos.circ_spiral(nTurns, innerRadius, pitch, dir, d)
+        inductorStyleIndex = self.indStyleCB.currentIndex()
+        if (inductorStyleIndex == InductorStyle.SQUARE):
+            vx = dos.square_spiral(nTurns, innerRadius, pitch)
+        else:
+            vx = dos.circ_spiral(nTurns, innerRadius, pitch, dir, d)
+
         sf.add_circ_spiral(vx, 1, traceWidth, cuThickness * 1e-3, pcbThickness)
         sf.add_ports()
         if (nLayers == 2):
@@ -257,57 +313,82 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         traceWidth = float(self.traceWidthLineEdit.text())
         nLayers = int(self.nLayersLineEdit.text())
         d = float(self.drawTolLineEdit.text())
+        
+        polygonVertexCount = None
 
-        sm = dos.kmodule(fname)
-        sm.write_header(name='SIND', descr='spiral inductor', tags='SMD')
+        geometricPrimitives = None
         dir = 1
-        if (self.indStyleCB.currentIndex() == 0): # circular segments
-            vx = dos.circ_spiral(nTurns, innerRadius, pitch, dir, d)
-            sm.add_circ_spiral(vx, 'F.Cu', traceWidth)
-            if (nLayers == 2):
-                pad1 = vx[-1] # inductor starts at end of top spiral
-                vx = dos.circ_spiral(nTurns, innerRadius, pitch, -dir, d)
-                sm.add_circ_spiral(vx, 'B.Cu', traceWidth)
-                sm.add_thru_pad('lc', 'circle', vx[0], dos.Point(0.6, 0.6), 0.3)
-                end_layer = 'B'
-            else: # single-layer spiral
-                pad1 = vx[0] # inductor starts at center of spiral
-                end_layer = 'F'
-            pad2 = vx[-1] # inductor ends always at end of last spiral
-        else: # circular arcs
-            # FIXME: make N below user-configurable instead of 4
-            arcs = dos.arcs_spiral(nTurns, innerRadius, pitch, dir, 4)
-            sm.add_arc_spiral(arcs, 'F.Cu', traceWidth)
-            if (nLayers == 2):
-                # inductor starts at end of top spiral
+        inductorStyleIndex = self.indStyleCB.currentIndex()
+        if (inductorStyleIndex == InductorStyle.CIRCULAR_SEGMENTS): # circular segments
+            geometricPrimitives = dos.circ_spiral(nTurns, innerRadius, pitch, dir, d)
+        elif (inductorStyleIndex == InductorStyle.CIRCULAR_ARCS): # circular arcs
+            polygonVertexCount = int(self.polygonVertexCountLineEdit.text())
+            geometricPrimitives = dos.arcs_spiral(nTurns, innerRadius, pitch, dir, polygonVertexCount)
+        elif (inductorStyleIndex == InductorStyle.SQUARE): # rectangle
+            geometricPrimitives = dos.square_spiral(nTurns, innerRadius, pitch)
+          
+        # Check if making an inductor from the given parameters is at all possible
+        if (geometricPrimitives is None):
+            self.showInvalidParametersErrorMsg()
+        else:
+            sm = dos.kmodule(fname)
+            sm.write_header(name='SIND', descr='spiral inductor', tags='SMD')
+            if (inductorStyleIndex == InductorStyle.CIRCULAR_SEGMENTS): # circular segments
+                vx = geometricPrimitives
+                sm.add_circ_spiral(vx, 'F.Cu', traceWidth)
+                if (nLayers == 2):
+                    pad1 = vx[-1] # inductor starts at end of top spiral
+                    vx = dos.circ_spiral(nTurns, innerRadius, pitch, -dir, d)
+                    sm.add_circ_spiral(vx, 'B.Cu', traceWidth)
+                    sm.add_thru_pad('lc', 'circle', vx[0], dos.Point(0.6, 0.6), 0.3)
+                    end_layer = 'B'
+                else: # single-layer spiral
+                    pad1 = vx[0] # inductor starts at center of spiral
+                    end_layer = 'F'
+                pad2 = vx[-1] # inductor ends always at end of last spiral
+            elif (inductorStyleIndex == InductorStyle.CIRCULAR_ARCS): # circular arcs
+                arcs = geometricPrimitives
+                sm.add_arc_spiral(arcs, 'F.Cu', traceWidth)
+                if (nLayers == 2):
+                    # inductor starts at end of top spiral
+                    p_end = arcs[-1][1].copy() # starting point of the last arc
+                    p_center = arcs[-1][0] # centre of the last arc
+                    theta = arcs[-1][2] # arc starting point
+                    p_end.rotate_about(p_center, theta)  # end point of the circular arc
+                    pad1 = p_end
+                    arcs = dos.arcs_spiral(nTurns, innerRadius, pitch, -dir, polygonVertexCount)
+                    sm.add_arc_spiral(arcs, 'B.Cu', traceWidth)
+                    sm.add_thru_pad('lc', 'circle', arcs[0][1], dos.Point(0.6, 0.6), 0.3)
+                    end_layer = 'B'
+                else: # single-layer spiral
+                    # inductor starts at center of spiral
+                    pad1 = arcs[0][1] # starting point of the last arc
+                    end_layer = 'F'
+                # inductor ends always at end of last spiral
                 p_end = arcs[-1][1].copy() # starting point of the last arc
                 p_center = arcs[-1][0] # centre of the last arc
                 theta = arcs[-1][2] # arc starting point
                 p_end.rotate_about(p_center, theta)  # end point of the circular arc
-                pad1 = p_end
-                arcs = dos.arcs_spiral(nTurns, innerRadius, pitch, -dir, 4)
-                sm.add_arc_spiral(arcs, 'B.Cu', traceWidth)
-                sm.add_thru_pad('lc', 'circle', arcs[0][1], dos.Point(0.6, 0.6), 0.3)
-                end_layer = 'B'
-            else: # single-layer spiral
-                # inductor starts at center of spiral
-                pad1 = arcs[0][1] # starting point of the last arc
+                pad2 = p_end
+            elif (inductorStyleIndex == InductorStyle.SQUARE): # rectangle
+                vx = geometricPrimitives                
+                sm.add_circ_spiral(vx, 'F.Cu', traceWidth)
+                # single-layer spiral
+                pad1 = vx[0] # inductor starts at center of spiral
                 end_layer = 'F'
-            # inductor ends always at end of last spiral
-            p_end = arcs[-1][1].copy() # starting point of the last arc
-            p_center = arcs[-1][0] # centre of the last arc
-            theta = arcs[-1][2] # arc starting point
-            p_end.rotate_about(p_center, theta)  # end point of the circular arc
-            pad2 = p_end
+                
+                pad2 = vx[-1] # inductor ends always at end of last spiral
+            else:
+                pass
 
-        # add SMD pads at the beginning and end
-        padSize = dos.Point(traceWidth/2.0, traceWidth/2.0)
-        sm.add_smd_pad('1', 'rect', pad1, padSize, 'F')
-        sm.add_smd_pad('2', 'rect', pad2, padSize, end_layer)
+            # add SMD pads at the beginning and end
+            padSize = dos.Point(traceWidth/2.0, traceWidth/2.0)
+            sm.add_smd_pad('1', 'rect', pad1, padSize, 'F')
+            sm.add_smd_pad('2', 'rect', pad2, padSize, end_layer)
 
-        #draw_arcs_spiral(nTurns, innerRadius, pitch, traceWidth, N, dir)
-        sm.write_refs(0, 0, ref='REF**', value='LLL')
-        sm.close()
+            #draw_arcs_spiral(nTurns, innerRadius, pitch, traceWidth, N, dir)
+            sm.write_refs(0, 0, ref='REF**', value='LLL')
+            sm.close()
 
     def estimateInductance(self):
         try:
