@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>756</width>
-    <height>684</height>
+    <width>958</width>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,455 +18,434 @@
     <normaloff>spiki.png</normaloff>spiki.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>10</y>
-      <width>271</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>PCB properties</string>
-    </property>
-    <widget class="QWidget" name="gridLayoutWidget_3">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>20</y>
-       <width>261</width>
-       <height>111</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="2" column="2">
-       <widget class="QLabel" name="label_16">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="cuThicknessLabel">
-        <property name="text">
-         <string>copper thickness</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="pcbThicknessLineEdit"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="cuThicknessLineEdit"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="minSpacingLabel">
-        <property name="text">
-         <string>min spacing</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>um</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_13">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="minSpacingLineEdit"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="pcbThicknessLabel">
-        <property name="text">
-         <string>PCB thickness</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>270</y>
-      <width>351</width>
-      <height>281</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Simulation</string>
-    </property>
-    <widget class="QWidget" name="gridLayoutWidget_4">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>20</y>
-       <width>331</width>
-       <height>242</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="simQLineEdit"/>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="qLabel">
-        <property name="text">
-         <string>Q</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="freqLineEdit"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="freqLabel">
-        <property name="minimumSize">
-         <size>
-          <width>125</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>frequency</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="label_19">
-        <property name="text">
-         <string>ohm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="simResLineEdit"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="simResLabel">
-        <property name="text">
-         <string>resistance</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_15">
-        <property name="text">
-         <string>MHz</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="7" column="1">
-       <widget class="QLineEdit" name="desiredIndLineEdit"/>
-      </item>
-      <item row="7" column="2">
-       <widget class="QLabel" name="label_14">
-        <property name="text">
-         <string>uH</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="simIndLabel">
-        <property name="text">
-         <string>inductance</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="simIndLineEdit"/>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="desiredIndLabel">
-        <property name="minimumSize">
-         <size>
-          <width>125</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>desired inductance</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="label_17">
-        <property name="text">
-         <string>uH</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QPushButton" name="optimizeBtn">
-        <property name="text">
-         <string>optimize</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="skinDepthLabel">
-        <property name="text">
-         <string>skin depth</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="skinDepthLineEdit"/>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_20">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QPushButton" name="runSimBtn">
-        <property name="text">
-         <string>Run simulation</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>10</y>
-      <width>341</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Inductor parameters</string>
-    </property>
-    <widget class="QWidget" name="gridLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>20</y>
-       <width>331</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="5" column="1">
-       <widget class="QLineEdit" name="traceWidthLineEdit"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="pitchLineEdit"/>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="traceWidthLabel">
-        <property name="text">
-         <string>trace width</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="innerRadiusLabel">
-        <property name="text">
-         <string>inner radius</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="estIndLabel">
-        <property name="text">
-         <string>estimated inductance</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="innerRadiusLineEdit"/>
-      </item>
-      <item row="3" column="2">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="nTurnsLabel">
-        <property name="text">
-         <string>number of turns</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QLineEdit" name="estIndLineEdit"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="nTurnsLineEdit"/>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="spacingLineEdit"/>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="spacingLabel">
-        <property name="text">
-         <string>spacing</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="8" column="2">
-       <widget class="QLabel" name="label_18">
-        <property name="text">
-         <string>uH</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLabel" name="label_10">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="label_8">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="pitchLabel">
-        <property name="text">
-         <string>pitch</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="nLayersLabel">
-        <property name="text">
-         <string>number of layers</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="nLayersLineEdit"/>
-      </item>
-     </layout>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_4">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>150</y>
-      <width>291</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Settings</string>
-    </property>
-    <widget class="QWidget" name="gridLayoutWidget_2">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>20</y>
-       <width>261</width>
-       <height>80</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>drawing tolerance</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_21">
-        <property name="text">
-         <string>mm</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="drawTolLineEdit"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>inductor style</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QComboBox" name="indStyleCB">
-        <item>
-         <property name="text">
-          <string>circular segments</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>circular arcs</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout_11">
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Simulation</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_19">
+           <property name="text">
+            <string>ohm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="simResLineEdit"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="qLabel">
+           <property name="text">
+            <string>Q</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="freqLineEdit"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="simQLineEdit"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="freqLabel">
+           <property name="minimumSize">
+            <size>
+             <width>125</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>frequency</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="simResLabel">
+           <property name="text">
+            <string>resistance</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>MHz</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="desiredIndLineEdit"/>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>uH</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="simIndLabel">
+           <property name="text">
+            <string>inductance</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="simIndLineEdit"/>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="desiredIndLabel">
+           <property name="minimumSize">
+            <size>
+             <width>125</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>desired inductance</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>uH</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QPushButton" name="optimizeBtn">
+           <property name="text">
+            <string>optimize</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="skinDepthLabel">
+           <property name="text">
+            <string>skin depth</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="skinDepthLineEdit"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_20">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QPushButton" name="runSimBtn">
+           <property name="text">
+            <string>Run simulation</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>PCB properties</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="minSpacingLineEdit"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="cuThicknessLineEdit"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>um</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="pcbThicknessLabel">
+           <property name="text">
+            <string>PCB thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="minSpacingLabel">
+           <property name="text">
+            <string>min spacing</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="pcbThicknessLineEdit"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="cuThicknessLabel">
+           <property name="text">
+            <string>copper thickness</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="title">
+       <string>Settings</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>drawing tolerance</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_21">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="drawTolLineEdit"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>inductor style</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="2">
+          <widget class="QComboBox" name="indStyleCB">
+           <item>
+            <property name="text">
+             <string>circular segments</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>circular arcs</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>square</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="polygonVertexCountLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>polygon vertex count</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="polygonVertexCountLineEdit">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>Inductor parameters</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="5" column="0">
+          <widget class="QLabel" name="traceWidthLabel">
+           <property name="text">
+            <string>trace width</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="traceWidthLineEdit"/>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="pitchLineEdit"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="innerRadiusLabel">
+           <property name="text">
+            <string>inner radius</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="estIndLabel">
+           <property name="text">
+            <string>estimated inductance</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="innerRadiusLineEdit"/>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="nTurnsLabel">
+           <property name="text">
+            <string>number of turns</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QLineEdit" name="estIndLineEdit"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="nTurnsLineEdit"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="spacingLineEdit"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="spacingLabel">
+           <property name="text">
+            <string>spacing</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="2">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>uH</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>mm</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="pitchLabel">
+           <property name="text">
+            <string>pitch</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="nLayersLabel">
+           <property name="text">
+            <string>number of layers</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="nLayersLineEdit"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+      <zorder>gridLayoutWidget</zorder>
+      <zorder>groupBox_2</zorder>
+      <zorder>groupBox_2</zorder>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>756</width>
-     <height>25</height>
+     <width>958</width>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -482,7 +461,9 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionExit">
    <property name="icon">
-    <iconset theme="Exit"/>
+    <iconset theme="Exit">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -490,7 +471,9 @@
   </action>
   <action name="actionSave_module">
    <property name="icon">
-    <iconset theme="exit"/>
+    <iconset theme="exit">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>Save module</string>

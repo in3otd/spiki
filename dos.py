@@ -440,6 +440,66 @@ def circ_spiral(N_turns, r_in, pitch, dir, d=0.1):
 
     return vertices
 
+def square_spiral_segment(side_width_in_mm):
+    vertices = []
+    
+    gap_between_terminals_in_mm = 2.3
+    
+    
+    x = (side_width_in_mm / 2.0) * -1.0
+    y = (gap_between_terminals_in_mm / 2.0)
+    vertices.append(Point(x, y))
+
+    y = (side_width_in_mm / 2.0)
+    vertices.append(Point(x, y))
+
+    x = (side_width_in_mm / 2.0)
+    vertices.append(Point(x, y))
+
+    y = (side_width_in_mm / 2.0) * -1.0
+    vertices.append(Point(x, y))
+    
+    x = (side_width_in_mm / 2.0) * -1.0
+    vertices.append(Point(x, y))
+    
+    y = (gap_between_terminals_in_mm / 2.0) * -1.0
+    vertices.append(Point(x, y))
+    
+    return vertices
+
+def square_spiral(N_turns, e_len, pitch):
+    """
+    Draw a square antenna using straight segments
+
+    Keyword arguments:
+    N_turns -- number of turns
+    e_len -- edge length
+    pitch -- spacing between conductors centers
+
+    Returns segments vertices list
+    """
+    
+    vertices = []
+    
+    new_vertices = square_spiral_segment(e_len)
+    vertices = vertices + new_vertices
+    
+    if (N_turns > 1):
+        N_turns = (N_turns - 1)
+        while (N_turns > 0):            
+            if (e_len < pitch):
+                vertices = None
+                break
+
+            e_len = e_len - (pitch * 2.0)
+            new_vertices = square_spiral_segment(e_len)
+
+            vertices = vertices + new_vertices
+
+            N_turns = (N_turns - 1)
+
+    return vertices
+
 
 def draw_arcs_spiral(N_turns, r_in, pitch, tr_w, N, dir):
     """
