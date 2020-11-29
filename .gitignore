@@ -1,5 +1,6 @@
 # Temp Files
 *~
+.\__pycache__\*
 
 # emacs
 # dot hash files (write locks)
