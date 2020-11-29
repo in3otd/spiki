@@ -14,8 +14,8 @@ except ImportError:
 if (useNLopt):
     from numpy import *  # needed by nlopt
 
-from PyQt4 import QtGui, uic
-from PyQt4.QtCore import QThread
+from PyQt5 import QtGui, QtWidgets, uic
+from PyQt5.QtCore import QThread
 
 import dos
 
@@ -28,7 +28,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         self.setupUi(self)
 
         # File
-        self.actionExit.triggered.connect(QtGui.qApp.quit)
+        self.actionExit.triggered.connect(QtWidgets.qApp.quit)
         self.actionSave_module.triggered.connect(self.writeModule)
 
         # add validators to LineEdits
@@ -117,7 +117,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
     def runSimulation(self):
         self.statusBar().showMessage("Simulating...")
         # update GUI to show changes status bar message
-        QtGui.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
         self.simulate()
         self.statusBar().showMessage("Ready.")
 
@@ -207,7 +207,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
     def runOptimization(self):
         self.statusBar().showMessage("Optimizing...")
         # update GUI to show changes status bar message
-        QtGui.QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
 
         nTurns = float(self.nTurnsLineEdit.text())
         innerRadius = float(self.innerRadiusLineEdit.text())
@@ -223,7 +223,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
             if grad.size > 0:
                 grad = Null
             self.spacingLineEdit.setText(str(x[0]))
-            QtGui.QApplication.processEvents()  # update GUI
+            QtWidgets.QApplication.processEvents()  # update GUI
             ind = self.simulate()
             err = math.fabs(ind - targetInd)
             return err
@@ -235,20 +235,20 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         opt.set_xtol_rel(1e-2)
         x = opt.optimize([spacing])
         minf = opt.last_optimum_value()
-        print "optimum at ", x[0]
-        print "minimum value = ", minf
-        print "result code = ", opt.last_optimize_result()
+        print("optimum at ", x[0])
+        print("minimum value = ", minf)
+        print("result code = ", opt.last_optimize_result())
 
         self.spacingLineEdit.setText(str(x[0]))
 
         self.statusBar().showMessage("Ready.")
 
-    def writeModule(self):
-        fname = QtGui.QFileDialog.getSaveFileName(self, 'Save Module', '.', 'Footprint (*.kicad_mod);;Any File (*)')
+    def writeModule(self):        
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, 'Save Module', '.', 'Footprint (*.kicad_mod);;Any File (*)')        
         if (not fname):
             return
-        if (not fname.endsWith('.kicad_mod')):
-            fname = fname + '.kicad_mod'
+        if (not fname[0].endswith('.kicad_mod')):
+            fname[0] = fname[0] + '.kicad_mod'
 
         nTurns = float(self.nTurnsLineEdit.text())
         innerRadius = float(self.innerRadiusLineEdit.text())
@@ -325,9 +325,9 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
         din = 2 * innerRadius - traceWidth + pitch / 2.0
         dout = 2 * innerRadius + (2 * nTurns - 0.5) * pitch + traceWidth
         ind = dos.calc_ind(nTurns, dout / 1e3, din / 1e3)
-        # print 'din =', din
-        # print 'dout =', dout
-        # print 'ind =', ind
+        # print('din =', din)
+        # print('dout =', dout)
+        # print('ind =', ind)
 
         if (nLayers == 1):
             indtot = ind  # single-lyer inductor
@@ -339,7 +339,7 @@ class kSpiralCalc(QtBaseClass, Ui_MainWindow):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     form = kSpiralCalc()
     form.show()
     app.exec_()

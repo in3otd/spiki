@@ -90,7 +90,7 @@ class kmodule():
     """KiCad module."""
 
     def __init__(self, fname):
-        self.fout = open(fname, 'w')
+        self.fout = open(fname[0], 'w')
 
     def write_header(self, name='SIND', descr='spiral inductor', tags='SMD'):
         self.fout.write('(module %s (layer F.Cu)\n' % name)
@@ -325,7 +325,7 @@ class fh_file():
                     # take real and imag parts
                     pair = re.compile(r' *(\S+) +(\S+)j')
                     for ridx in range(nrows):
-                        lin = fzc.next()
+                        lin = fzc.readline()
                         # parse all complex data pairs
                         celms = pair.findall(lin)
                         matr = []
@@ -584,11 +584,11 @@ if __name__ == '__main__':
     din = 2 * r_in - tr_w + pitch / 2.0
     dout = 2 * r_in + (2 * N_turns - 0.5) * pitch + tr_w
     ind = calc_ind(N_turns, dout / 1e3, din / 1e3)
-    print 'din =', din
-    print 'dout =', dout
-    print 'ind =', ind
+    print('din =', din)
+    print('dout =', dout)
+    print('ind =', ind)
     k = calc_mut(N_turns, PCB_h)
-    print 'mutual ind =', k * ind, k
+    print('mutual ind =', k * ind, k)
 
     draw_arcs_spiral(N_turns, r_in, pitch, tr_w, N, -dir)
     sf.add_ports()
@@ -604,5 +604,5 @@ if __name__ == '__main__':
     sf.run()
 
     freqs, mats = sf.readZc()
-    print freqs
-    print mats
+    print(freqs)
+    print(mats)
